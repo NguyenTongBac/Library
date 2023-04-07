@@ -91,7 +91,7 @@ internal class Program
                 Console.WriteLine("3. Delete your item");
                 Console.WriteLine("4. Get item");
                 Console.WriteLine("5. Search your items by name");
-                Console.WriteLine("6. Show information of borrowers with search");
+                Console.WriteLine("6. Show List information of borrowers with search");
                 Console.WriteLine("7. Show history borrowed of borrower with details");
                 Console.WriteLine("8. Show item borrowed");
                 Console.Write("Please enter your number choice: ");
@@ -162,13 +162,14 @@ internal class Program
 
                     case "6":
                         Console.Clear();
-                        Console.WriteLine("Please enter keyword name to search the borrower:");
-                        ShowListInforBorrowerWithSearch(Console.ReadLine());
+                        Console.Write("Please enter keyword name to search the borrower: ");
+                        keyword = Console.ReadLine();
+                        ShowListInforBorrowerWithSearch(keyword);
                         break;
 
                     case "7":
                         Console.Clear();
-                        Console.WriteLine("Please enter the libraryNumberCard: ");
+                        Console.Write("Please enter the libraryNumberCard: ");
                         GetBorrowingHistoryListByBorrower(Console.ReadLine());
                         break;
 
@@ -377,22 +378,21 @@ internal class Program
 
         void ShowListInforBorrowerWithSearch(string keyword)
         {
-            var listSearchBorrower = borrowers.FindAll(x => x.Name.Contains(keyword));
+            var listSearchBorrower = borrowers.FindAll(x => x.Name.ToLower().Contains(keyword));
 
             if(listSearchBorrower.Count == 0)
             {
                 Console.WriteLine("There are no borrower as search!!!");
+                Console.WriteLine("Press any key to go back");
+                Console.ReadKey();
             }
             else
             {
-                foreach(var borrower in borrowers.FindAll(x => x.Name.Contains(keyword)))
+                foreach(var borrower in listSearchBorrower)
                 {
-                    if(borrower.Name.Contains(keyword))
-                    {
                         borrower.GetInfo();
                         Console.WriteLine("Press enter to countinue");
                         Console.Read();
-                    }
                 }
 
                 Console.WriteLine("End List!!!");
@@ -408,6 +408,7 @@ internal class Program
             
             borrowHistory.Borrower = borrowers.Find(x => x.LibraryCardNumber == borrowHistory.BorrowerId);
             borrowHistoryDetails.ForEach(x => x.Item = items.Find(y => y.Id == x.ItemId));
+            borrowHistory.BorrowingHistoryDetails = borrowHistoryDetails;
             borrowHistory.GetInfo();
 
             Console.WriteLine("Do you want see the details? Press y");
@@ -427,6 +428,12 @@ internal class Program
     
         void GetBorrowingHistoryListByBorrower(string libraryCardNumber)
         {
+            while(libraryCardNumber == "")
+            {
+                Console.Write("Please enter a library card number: ");
+                libraryCardNumber = Console.ReadLine();
+            }
+
             var borrowingHistoriesOfBorrower = borrowingHistories.FindAll(x => x.BorrowerId == libraryCardNumber);
 
             if(borrowingHistoriesOfBorrower.Count != 0)
@@ -606,25 +613,40 @@ internal class Program
                 Console.WriteLine("There are no borrower with libary card :" + libraryCardNumber);
                 Console.WriteLine("Press any key to go back");
                 Console.Read();
+                return;
             }
             
             foreach(var borrower in borrowerSearch)
             {
                 var borrowHistories = borrowingHistories.FindAll(x => x.BorrowerId == borrower.LibraryCardNumber);
                 Console.WriteLine("Borrower name: " + borrower.Name);
-
-                foreach (var borrowHistory in borrowHistories)
+                if(borrowHistories.Count == 0)
                 {
-                    var borrowedHistoryDetails = borrowingHistoryDetails.FindAll(x => x.BorrowingHistoryId == borrowHistory.Id && x.HasReturn == false);
-                    
-                    foreach(var borrowedHistoryDetail in borrowedHistoryDetails)
-                    {
-                        var item = items.Find(x => x.Id == borrowedHistoryDetail.ItemId);
-                        Console.WriteLine("Item title: " + item.Title);
-                        Console.WriteLine("Date borrow: " + borrowHistory.BorrowDate);
-                        Console.WriteLine("is return: " + borrowedHistoryDetail.HasReturn);
-                    }
+                    Console.WriteLine("There are no item borrowing by this user");
                 }
+                else
+                {
+                    foreach (var borrowHistory in borrowHistories)
+                    {
+                        var borrowedHistoryDetails = borrowingHistoryDetails.FindAll(x => x.BorrowingHistoryId == borrowHistory.Id && x.HasReturn == false);
+                        
+                        if(borrowedHistoryDetails.Count == 0)
+                        {
+                            Console.WriteLine("There are no item borrowing by this user");
+                        }
+                        else
+                        {
+                            foreach(var borrowedHistoryDetail in borrowedHistoryDetails)
+                            {
+                                var item = items.Find(x => x.Id == borrowedHistoryDetail.ItemId);
+                                Console.WriteLine("----------------------------------------------------------------");
+                                Console.WriteLine("Item title: " + item.Title);
+                                Console.WriteLine("Date borrow: " + borrowHistory.BorrowDate);
+                                Console.WriteLine("is return: " + borrowedHistoryDetail.HasReturn);
+                            }
+                        }
+                    }
+                }    
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
             }

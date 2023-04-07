@@ -48,7 +48,8 @@ public class BorrowingHistory
     public void GetInfo()
     {
         Console.WriteLine("Borrower Id: " + this.BorrowerId);
-        Console.WriteLine("Borrow Name: " + this.Borrower.Name);
+        Console.WriteLine("Borrower Name: " + this.Borrower.Name);
         Console.WriteLine("Borrow Date: " + this.BorrowDate);
+        Console.WriteLine("Number of item borrowed: " + this.BorrowingHistoryDetails.Count);
     }
 }
