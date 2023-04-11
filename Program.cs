@@ -1,6 +1,7 @@
 ﻿using Model.Tables;
 using Controller.IService;
 using Controller.Service;
+using  Microsoft.Extensions.DependencyInjection;
 
 internal class Program
 {
@@ -244,6 +245,7 @@ internal class Program
                     while(!int.TryParse(numberItem, out number))
                     {
                         Console.Write("Please enter the number: ");
+                        numberItem = Console.ReadLine();
                     }
 
                     var item = items[number-1];
@@ -266,6 +268,7 @@ internal class Program
                     while(!int.TryParse(numberItem, out number))
                     {
                         Console.Write("Please enter the number: ");
+                        numberItem = Console.ReadLine();
                     }
 
                     if(_itemService.DeleteItemById(items[number-1].Id))
@@ -595,10 +598,10 @@ internal class Program
             {
                 var borrower = _borrowerService.GetBorrowerByLibraryCardNumber(libaryCardNumber);
 
-                while(libaryCardNumber == null || libaryCardNumber == "" || borrower == null)
+                while(borrower == null)
                 {
                     Console.Write("Please enter the number of library card: ");
-                    libaryCardNumber = Console.ReadLine();
+                    borrower = _borrowerService.GetBorrowerByLibraryCardNumber(Console.ReadLine());
                 }
                 
                 var borrowHistories = _borrowHistoryService.GetListBorrowHistoryByIdBorrower(libaryCardNumber);
@@ -919,6 +922,11 @@ internal class Program
 
     private static void Main(string[] args)
     {
+        var services = new ServiceCollection();
+        services.AddScoped<IBorrowerService, BorrowerService>();
+        services.AddScoped<IItemService, ItemService>();
+        services.AddScoped<IBorrowHistoryService, BorrowHistoryService>();
+
         Console.Clear();
         Login();
     }

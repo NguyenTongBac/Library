@@ -4,7 +4,7 @@ namespace Controller.IService;
 
 public interface IBorrowHistoryService
 {
-    List<BorrowHistory> GetListBorrowHistoryByIdBorrower(string libaryCardNumber);
+    List<BorrowHistory> GetListBorrowHistoryByIdBorrower(string libraryCardNumber);
 
     bool InsertBorrowHistory(BorrowHistory borrowHistory);
 
