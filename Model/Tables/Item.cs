@@ -2,40 +2,7 @@ namespace  Model.Tables;
 
 public class Item
 {
-    public Item(Guid id, string title, string author, DateTime published, bool isBorrowed)
-    {
-        this.Id = id;
-        this.Title = title;
-        this.Author = author;
-        this.Published = published;
-        this.IsBorrowed = isBorrowed;
-    }
-
-    public Item(Guid id, string title, string author, DateTime published)
-    {
-        this.Id = id;
-        this.Title = title;
-        this.Author = author;
-        this.Published = published;
-    }
-    
-    public Item(string title, string author, DateTime published)
-    {
-        this.Title = title;
-        this.Author = author;
-        this.Published = published;
-        this.Id = Guid.NewGuid();
-        this.IsBorrowed = false;
-    }
-
-    public Item(string title, string author, DateTime published, bool isBorrowed)
-    {
-        this.Title = title;
-        this.Author = author;
-        this.Published = published;
-        this.Id = Guid.NewGuid();
-        this.IsBorrowed = isBorrowed;
-    }
+    private object title;
 
     public Guid Id { get; set;}
 
@@ -47,9 +14,9 @@ public class Item
 
     public bool IsBorrowed { get; set; }
 
-    public ICollection<BorrowingHistoryDetail> borrowingHistoryDetails { get; set; }
+    public ICollection<BorrowHistoryDetail> borrowHistoryDetails { get; set; }
 
-    public virtual void Update()
+    public virtual Item Update()
     {
         string input;
         var date = new DateTime();
@@ -70,8 +37,9 @@ public class Item
         }   
 
         this.Published = input == "" ? this.Published : date;
-    }
 
+        return this;
+    }
     public virtual void GetInfo()
     {
         Console.WriteLine("---------" + this.Title + "---------");
@@ -83,7 +51,26 @@ public class Item
 
     public Item()
     {
-        borrowingHistoryDetails = new HashSet<BorrowingHistoryDetail>();
+        borrowHistoryDetails = new HashSet<BorrowHistoryDetail>();
     }
 
+    public Item(Guid id, string title, string author, DateTime published, bool isBorrowed = false)
+    {
+        this.Id = id;
+        this.Title = title;
+        this.Author = author;
+        this.Published = published;
+        this.IsBorrowed = isBorrowed;
+        borrowHistoryDetails = new HashSet<BorrowHistoryDetail>();
+    }
+
+    public Item(string title, string author, DateTime published, bool isBorrowed = false)
+    {
+        this.Id = Guid.NewGuid();
+        this.Title = title;
+        this.Author = author;
+        this.Published = published;
+        this.IsBorrowed = isBorrowed;
+        borrowHistoryDetails = new HashSet<BorrowHistoryDetail>();
+    }
 }

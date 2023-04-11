@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "JmXTcB8AwNtWXpvqqZIEZukroj6RxZqDX2LPWA6/xsTYYLTcVZyq6HfO2hHanYr0CmVqtx9ublXwAOxyUJDuPw==",
+  "dgSpecHash": "P+IArbPt8332PDQGo/w8aqJEI4OV2fdYdZKZqpSTQmThKlv5/KiqyQcdM0W2lmYNQ4qzRArrv3mtHLj/JZn9ug==",
   "success": true,
   "projectFilePath": "/Users/nguyentongbac/Project/Library/Library.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/nguyentongbac/.nuget/packages/microsoft.extensions.dependencyinjection/7.0.0/microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
+    "/Users/nguyentongbac/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/7.0.0/microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

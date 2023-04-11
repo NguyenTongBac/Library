@@ -2,33 +2,25 @@ namespace Model.Tables;
 
 public class DVD : Item
 {
-    public DVD(Guid id, string title, string author, DateTime published, bool isBorrowed, TimeSpan runTime): base(id, title, author, published, isBorrowed)
+    public DVD(){}
+
+    public DVD(Guid id, string title, string author, DateTime published, TimeSpan runTime, bool isBorrowed = false): base(id, title, author, published, isBorrowed)
     {
         this.RunTime = runTime;
     }
 
-    public DVD(Guid id, string title, string author, DateTime published, TimeSpan runTime) : base(id, title, author, published)
-    {
-        this.RunTime = runTime;
-    }
-
-    public DVD(string title, string author, DateTime published, TimeSpan runTime) : base(title, author, published)
-    {
-        this.RunTime = runTime;
-    }
-
-    public DVD(string title, string author, DateTime published, TimeSpan runTime, bool isBorrowed) : base(title, author, published, isBorrowed)
+    public DVD(string title, string author, DateTime published, TimeSpan runTime, bool isBorrowed = false): base(title, author, published, isBorrowed)
     {
         this.RunTime = runTime;
     }
 
     public TimeSpan RunTime { get; set; }
 
-    public override void Update()
+    public override DVD Update()
     {
         base.Update();
-        var timeSpan = new TimeSpan();
 
+        var timeSpan = new TimeSpan();
         Console.Write("Runtime: " + this.RunTime + " -(Format: hh:mm:ss)> ");
         var runtime = Console.ReadLine();
 
@@ -37,8 +29,9 @@ public class DVD : Item
             Console.WriteLine("Please enter right format day: ");
             runtime = Console.ReadLine();
         }
-
         this.RunTime = timeSpan;
+
+        return this;
     }
 
     public override void GetInfo()
